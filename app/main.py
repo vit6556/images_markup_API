@@ -16,7 +16,8 @@ def init_db():
                             class text, 
                             api_key text
                         )""")
-
+    
+    os.system("mkdir app/dataset/")
     files = os.listdir("app/dataset/")
     for file in files:
         file_status = curs.execute("SELECT status FROM images WHERE image_name=?", (file, )).fetchone()
