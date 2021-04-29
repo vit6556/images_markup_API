@@ -1,12 +1,12 @@
 from flask import Flask, send_from_directory, request
 from hashlib import sha512
 import time, json, os, sqlite3, random, string
-from app import app
 
+app = Flask(__name__)
 my_ip = "127.0.0.1"
 
 def init_db():
-    conn = sqlite3.connect("data.db")
+    conn = sqlite3.connect("app/data.db")
     curs = conn.cursor()
  
     curs.execute("""CREATE TABLE IF NOT EXISTS
@@ -17,7 +17,7 @@ def init_db():
                             api_key text
                         )""")
 
-    files = os.listdir("dataset/")
+    files = os.listdir("app/dataset/")
     for file in files:
         file_status = curs.execute("SELECT status FROM images WHERE image_name=?", (file, )).fetchone()
 
@@ -34,7 +34,7 @@ def generate_api_key():
 
 @app.route("/api/get", methods=["GET"])
 def get_image():
-    conn = sqlite3.connect("data.db")
+    conn = sqlite3.connect("app/data.db")
     curs = conn.cursor()
 
     not_processed_images = curs.execute("SELECT image_name FROM images WHERE status='not processed'").fetchall()
@@ -50,7 +50,7 @@ def get_image():
 
 @app.route("/api/status", methods=["GET"])
 def status():
-    conn = sqlite3.connect("data.db")
+    conn = sqlite3.connect("app/data.db")
     curs = conn.cursor()
 
     not_processed_images = len(curs.execute("SELECT image_name FROM images WHERE status='not processed'").fetchall())
@@ -68,7 +68,7 @@ def post_answer():
     img_class = request.form.get("class")
 
     if img_name != None and api_key != None and img_class != None and status != None and status in ["save", "delete"]:
-        conn = sqlite3.connect("data.db")
+        conn = sqlite3.connect("app/data.db")
         curs = conn.cursor()
 
         img = curs.execute("SELECT * FROM images WHERE image_name=? and api_key=?", (img_name, api_key)).fetchone()
@@ -90,6 +90,6 @@ def post_answer():
 
 @app.route('/images/<path:filename>')
 def download_file(filename):
-    return send_from_directory("dataset/", filename, as_attachment=True)
+    return send_from_directory("app/dataset/", filename, as_attachment=True)
 
 init_db()
