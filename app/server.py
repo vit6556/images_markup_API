@@ -1,8 +1,8 @@
 from flask import Flask, send_from_directory, request
 from hashlib import sha512
 import time, json, os, sqlite3, random, string
+from app import app
 
-app = Flask(__name__)
 my_ip = "127.0.0.1"
 
 def init_db():
@@ -92,9 +92,4 @@ def post_answer():
 def download_file(filename):
     return send_from_directory("dataset/", filename, as_attachment=True)
 
-
-
-
-if __name__ == "__main__":
-    init_db()
-    app.run(debug=False, host='0.0.0.0', port=80)
+init_db()
