@@ -91,6 +91,6 @@ def post_answer():
 
 @app.route('/images/<path:filename>')
 def download_file(filename):
-    return send_from_directory("app/dataset/", filename, as_attachment=True)
+    return send_from_directory("dataset/", filename, as_attachment=True)
 
 init_db()
