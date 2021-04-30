@@ -1,9 +1,11 @@
 from flask import Flask, send_from_directory, request
 from hashlib import sha512
 import time, json, os, sqlite3, random, string
+from download_file_from_gdrive import add_images
 
 app = Flask(__name__)
 my_ip = "127.0.0.1"
+passwd = "" # Insert your password here
 
 def init_db():
     conn = sqlite3.connect("app/data.db")
@@ -48,6 +50,20 @@ def get_image():
     curs.close()
 
     return f"{{'img_name': '{img}', 'api_key': '{api_key}', 'img_link': 'http://{my_ip}/images/{img}'}}"
+
+@app.route("/api/add_images", methods=["POST"])
+def add():
+    hash = request.form.get("hash")
+    link = request.form.get("link")
+
+    if hash != None and link != None:
+        if hash == sha512((passwd + link).encode()).hexdigest():
+            add_images(link)
+            return "OK"
+
+    return "Error"
+
+
 
 @app.route("/api/status", methods=["GET"])
 def status():
