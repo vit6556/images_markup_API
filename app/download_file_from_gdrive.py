@@ -12,8 +12,8 @@ def download_file_from_google_drive(id):
         params = { 'id' : id, 'confirm' : token }
         response = session.get(URL, params = params, stream = True)
 
-    save_response_content(response, "images.zip")   
-    os.system(f"unzip images.zip && rm images.zip")
+    save_response_content(response, "images.zip")
+    os.system(f"unzip images.zip -d app/ && rm images.zip")
 
 def add_images(id):
     download_file_from_google_drive(id)

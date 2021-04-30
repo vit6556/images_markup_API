@@ -1,7 +1,7 @@
 from flask import Flask, send_from_directory, request
 from hashlib import sha512
 import time, json, os, sqlite3, random, string
-from download_file_from_gdrive import add_images
+from app.download_file_from_gdrive import add_images
 
 app = Flask(__name__)
 my_ip = "127.0.0.1"
@@ -59,6 +59,7 @@ def add():
     if hash != None and link != None:
         if hash == sha512((passwd + link).encode()).hexdigest():
             add_images(link)
+            init_db()
             return "OK"
 
     return "Error"
