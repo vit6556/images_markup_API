@@ -47,7 +47,7 @@ def get_image():
     conn.commit()
     curs.close()
 
-    return f"{{'img_name': '{img}', 'api_key': '{api_key}', 'img_link': 'https://{my_ip}/images/{img}'}}"
+    return f"{{'img_name': '{img}', 'api_key': '{api_key}', 'img_link': 'http://{my_ip}/images/{img}'}}"
 
 @app.route("/api/status", methods=["GET"])
 def status():
