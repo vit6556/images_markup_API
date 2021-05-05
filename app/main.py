@@ -1,9 +1,11 @@
 from flask import Flask, send_from_directory, request
-from hashlib import sha512
-import time, json, os, sqlite3, random, string
 from app.download_file_from_gdrive import add_images
+import time, json, os, sqlite3, random, string
+from flask_cors import CORS
+from hashlib import sha512
 
 app = Flask(__name__)
+CORS(app)
 my_ip = "127.0.0.1"
 passwd = "" # Insert your password here
 
